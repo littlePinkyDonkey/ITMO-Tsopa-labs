@@ -12,18 +12,19 @@ import java.util.List;
 @Data
 @Entity(name = "administrators")
 public class Administrator extends Account {
-    @Id
-    @Column(name = "ADMINISTRATOR_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long administratorId;
-
     @NotNull
     @Column(name = "ADMIN_ROLE")
     private String adminRole;
 
+    /**
+     * писок отзывов, которые необходимо просмотреть
+     **/
     @OneToMany(mappedBy = "inspector")
     private List<TemporaryFeedback> inspections;
 
+    /**
+     * список уведомлений, отправленных пользователю
+     **/
     @OneToMany(mappedBy = "sender")
     private List<UserNotification> sendedUserNotifications;
 

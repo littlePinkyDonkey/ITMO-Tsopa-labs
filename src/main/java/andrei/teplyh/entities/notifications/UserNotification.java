@@ -25,11 +25,17 @@ public class UserNotification {
     @Column(name = "DATE_OF_SENDING")
     private Timestamp dateOfSending;
 
+    /**
+     * администратор, отправивший уведомление
+     **/
     @NotNull
     @ManyToOne
     @JoinColumn(name = "SENDER_ID")
     private Administrator sender;
 
+    /**
+     * список пользователей, которым нужно отправить уведомление
+     **/
     @NotNull
     @ManyToMany
     @JoinTable(

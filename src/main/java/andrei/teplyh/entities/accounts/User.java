@@ -1,5 +1,6 @@
 package andrei.teplyh.entities.accounts;
 
+import andrei.teplyh.entities.feedbacks.PublishedFeedback;
 import andrei.teplyh.entities.notifications.UserNotification;
 import andrei.teplyh.entities.enums.Roles;
 import andrei.teplyh.entities.feedbacks.TemporaryFeedback;
@@ -12,15 +13,13 @@ import java.util.List;
 @Data
 @Entity(name = "users")
 public class User extends Account {
-    @Id
-    @Column(name = "USER_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
-
     @NotNull
     @Column(name = "USER_ROLE")
     private String userRole;
 
+    /**
+     * список уведомлений, пришедших данному пользователю
+     **/
     @ManyToMany
     @JoinTable(
             name = "notifications_recipients",
@@ -29,8 +28,17 @@ public class User extends Account {
     )
     private List<UserNotification> userNotifications;
 
+    /**
+     * список всех отзывов, которые ещё не опубликованы
+     **/
     @OneToMany(mappedBy = "author")
     private List<TemporaryFeedback> temporaryFeedbacks;
+
+    /**
+     * список опубликованных отзывов
+     **/
+    @OneToMany(mappedBy = "author")
+    private List<PublishedFeedback> publishedFeedbacks;
 
     @PrePersist
     public void prePersist() {
