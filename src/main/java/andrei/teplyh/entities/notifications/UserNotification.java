@@ -25,6 +25,10 @@ public class UserNotification {
     @Column(name = "DATE_OF_SENDING")
     private Timestamp dateOfSending;
 
+    @NotNull
+    @Column(name = "REVISION_RESULT")
+    private String revisionResult;
+
     /**
      * администратор, отправивший уведомление
      **/

@@ -13,7 +13,7 @@ public class Feedback {
     @Id
     @Column(name = "REVIEW_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long reviewID;
+    private long reviewId;
 
     @NotNull
     @Column(name = "MODEL_AND_MARK")
@@ -48,6 +48,18 @@ public class Feedback {
     @NotNull
     @Column(name = "MILEAGE")
     private int mileage;
+
+    @Column(name = "PHOTO_1_PATH")
+    private String photo1Path;
+
+    @Column(name = "PHOTO_2_PATH")
+    private String photo2Path;
+
+    @Column(name = "PHOTO_3_PATH")
+    private String photo3Path;
+
+    @Column(name = "PHOTO_4_PATH")
+    private String photo4Path;
 
     @ManyToOne
     @JoinColumn(name = "AUTHOR")
