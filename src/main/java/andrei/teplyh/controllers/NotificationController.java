@@ -1,8 +1,6 @@
 package andrei.teplyh.controllers;
 
 import andrei.teplyh.dto.UserNotificationDto;
-import andrei.teplyh.exceptions.EditsNeededException;
-import andrei.teplyh.exceptions.FeedbackRejectedException;
 import andrei.teplyh.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

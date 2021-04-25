@@ -1,11 +1,11 @@
 package andrei.teplyh.services.impl;
 
-import andrei.teplyh.entities.feedbacks.Feedback;
+import andrei.teplyh.entities.UploadedFile;
 import andrei.teplyh.entities.feedbacks.PublishedFeedback;
 import andrei.teplyh.entities.feedbacks.TemporaryFeedback;
 import andrei.teplyh.repositories.PublishedFeedbackRepository;
 import andrei.teplyh.repositories.TemporaryFeedbackRepository;
-import andrei.teplyh.services.FeedbackService;
+import andrei.teplyh.repositories.UploadedFileRepository;
 import andrei.teplyh.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,13 +17,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class FileServiceImpl implements FileService {
-
     private final TemporaryFeedbackRepository temporaryFeedbackRepository;
     private final PublishedFeedbackRepository publishedFeedbackRepository;
+    private final UploadedFileRepository uploadedFileRepository;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -31,46 +33,64 @@ public class FileServiceImpl implements FileService {
     @Autowired
     public FileServiceImpl(
             TemporaryFeedbackRepository temporaryFeedbackRepository,
-            PublishedFeedbackRepository publishedFeedbackRepository
+            PublishedFeedbackRepository publishedFeedbackRepository,
+            UploadedFileRepository uploadedFileRepository
     ) {
         this.temporaryFeedbackRepository = temporaryFeedbackRepository;
         this.publishedFeedbackRepository = publishedFeedbackRepository;
+        this.uploadedFileRepository = uploadedFileRepository;
     }
 
     @Override
-    public String saveFile(MultipartFile file) {
-        String resultPath = null;
+    public List<UploadedFile> saveFiles(List<MultipartFile> files) {
+        List<UploadedFile> uploadedFiles = new ArrayList<>();
         try {
-            if (file != null){
-                File directory = new File(uploadPath);
-                if (!directory.exists()) {
-                    directory.mkdir();
+            if (files != null && !files.isEmpty()) {
+
+                long fileNumber = 1;
+                for(MultipartFile file : files) {
+                    File directory = new File(uploadPath);
+                    if (!directory.exists()) {
+                        directory.mkdir();
+                    }
+
+                    String uuId = UUID.randomUUID().toString();
+                    StringBuilder resultFileName = new StringBuilder(uuId)
+                            .append(".")
+                            .append(file.getOriginalFilename());
+
+                    String resultPath = uploadPath + "/" + resultFileName;
+
+                    file.transferTo(new File(resultPath));
+
+                    UploadedFile uploadedFile = new UploadedFile();
+                    uploadedFile.setFileNumber(fileNumber++);
+                    uploadedFile.setFilePath(resultPath);
+
+                    uploadedFiles.add(uploadedFile);
                 }
-
-                String uuId = UUID.randomUUID().toString();
-                StringBuilder resultFileName = new StringBuilder(uuId)
-                        .append(".")
-                        .append(file.getOriginalFilename());
-
-                resultPath = uploadPath + "/" + resultFileName;
-
-                file.transferTo(new File(resultPath));
             }
 
-            return resultPath;
+            return uploadedFiles;
         } catch (IOException e) {
-            return resultPath;
+            return null;
         }
     }
 
     @Override
     public InputStreamResource getFileFromTemporaryStorage(Long temporaryReviewId, Long fileNumber) throws FileNotFoundException {
         TemporaryFeedback feedback = temporaryFeedbackRepository.findTemporaryFeedbackByReviewId(temporaryReviewId);
+        if (feedback == null) {
+            throw new NullPointerException("No such feedback. Maybe your feedback is already published");
+        }
+
+        UploadedFile uploadedFile =
+                uploadedFileRepository.findUploadedFileByFileNumberAndTemporaryFeedback(fileNumber, feedback);
 
         InputStreamResource resource;
         try {
-            resource = new InputStreamResource(new FileInputStream(new File(selectFile(feedback, fileNumber))));
-        } catch (FileNotFoundException e) {
+            resource = new InputStreamResource(new FileInputStream(new File(uploadedFile.getFilePath())));
+        } catch (FileNotFoundException | NullPointerException e) {
             throw new FileNotFoundException("File not found");
         }
 
@@ -80,34 +100,20 @@ public class FileServiceImpl implements FileService {
     @Override
     public InputStreamResource getFileFromPublishedStorage(Long publishedReviewId, Long fileNumber) throws FileNotFoundException {
         PublishedFeedback feedback = publishedFeedbackRepository.findPublishedFeedbackByReviewId(publishedReviewId);
+        if (feedback == null) {
+            throw new NullPointerException("No such feedback. Maybe your feedback still not published");
+        }
+
+        UploadedFile uploadedFile =
+                uploadedFileRepository.findUploadedFileByFileNumberAndPublishedFeedback(fileNumber, feedback);
 
         InputStreamResource resource;
         try {
-            resource = new InputStreamResource(new FileInputStream(new File(selectFile(feedback, fileNumber))));
-        } catch (FileNotFoundException e) {
+            resource = new InputStreamResource(new FileInputStream(new File(uploadedFile.getFilePath())));
+        } catch (FileNotFoundException | NullPointerException e) {
             throw new FileNotFoundException("File not found");
         }
 
         return resource;
     }
-
-    //TODO: вынеси хранение файла в отдельную блядскую таблицу, чтобы не говнокодить!!!!!!!
-    private String selectFile(Feedback feedback, Long fileNumber) throws FileNotFoundException {
-        String filePath;
-
-        if (fileNumber == 1 && feedback.getPhoto1Path() != null) {
-            filePath = feedback.getPhoto1Path();
-        } else if (fileNumber == 2 && feedback.getPhoto2Path() != null) {
-            filePath = feedback.getPhoto2Path();
-        } else if (fileNumber == 3 && feedback.getPhoto3Path() != null) {
-            filePath = feedback.getPhoto3Path();
-        } else if (fileNumber == 4 && feedback.getPhoto4Path() != null) {
-            filePath = feedback.getPhoto4Path();
-        } else {
-            throw new FileNotFoundException("No file with such number");
-        }
-
-        return filePath;
-    }
-
 }

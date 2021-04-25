@@ -26,10 +26,7 @@ public class PublishedFeedbackMapper {
         publishedFeedback.setOwnership(temporaryFeedback.getOwnership());
         publishedFeedback.setMileage(temporaryFeedback.getMileage());
         publishedFeedback.setAuthor(temporaryFeedback.getAuthor());
-        publishedFeedback.setPhoto1Path(temporaryFeedback.getPhoto1Path());
-        publishedFeedback.setPhoto2Path(temporaryFeedback.getPhoto2Path());
-        publishedFeedback.setPhoto3Path(temporaryFeedback.getPhoto3Path());
-        publishedFeedback.setPhoto4Path(temporaryFeedback.getPhoto4Path());
+        publishedFeedback.setFiles(temporaryFeedback.getFiles());
 
         return publishedFeedback;
     }

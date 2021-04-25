@@ -2,6 +2,7 @@ package andrei.teplyh.services.impl;
 
 import andrei.teplyh.dto.PublishedFeedbackDto;
 import andrei.teplyh.dto.TemporaryFeedbackDto;
+import andrei.teplyh.entities.UploadedFile;
 import andrei.teplyh.entities.accounts.Administrator;
 import andrei.teplyh.entities.accounts.User;
 import andrei.teplyh.entities.enums.FeedbackStatuses;
@@ -14,6 +15,7 @@ import andrei.teplyh.mappers.TemporaryFeedbackMapper;
 import andrei.teplyh.mappers.PublishedFeedbackMapper;
 import andrei.teplyh.repositories.PublishedFeedbackRepository;
 import andrei.teplyh.repositories.TemporaryFeedbackRepository;
+import andrei.teplyh.repositories.UploadedFileRepository;
 import andrei.teplyh.services.AdministratorService;
 import andrei.teplyh.services.FeedbackService;
 import andrei.teplyh.services.FileService;
@@ -28,6 +30,7 @@ import java.util.List;
 public class FeedbackServiceImpl implements FeedbackService {
     private final TemporaryFeedbackRepository temporaryFeedbackRepository;
     private final PublishedFeedbackRepository publishedFeedbackRepository;
+    private final UploadedFileRepository uploadedFileRepository;
 
     private final TemporaryFeedbackMapper temporaryFeedbackMapper;
     private final PublishedFeedbackMapper publishedFeedbackMapper;
@@ -40,6 +43,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     public FeedbackServiceImpl(
             TemporaryFeedbackRepository temporaryFeedbackRepository,
             PublishedFeedbackRepository publishedFeedbackRepository,
+            UploadedFileRepository uploadedFileRepository,
             TemporaryFeedbackMapper temporaryFeedbackMapper,
             PublishedFeedbackMapper publishedFeedbackMapper,
             AdministratorService administratorService,
@@ -47,6 +51,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             FileService fileService) {
        this.temporaryFeedbackRepository = temporaryFeedbackRepository;
        this.publishedFeedbackRepository = publishedFeedbackRepository;
+       this.uploadedFileRepository = uploadedFileRepository;
 
        this.temporaryFeedbackMapper = temporaryFeedbackMapper;
        this.publishedFeedbackMapper = publishedFeedbackMapper;
@@ -73,9 +78,16 @@ public class FeedbackServiceImpl implements FeedbackService {
         entity.setInspector(inspector);
 
         entity.setFeedbackStatus(FeedbackStatuses.ON_REVISION);
-        entity.setPhoto1Path(fileService.saveFile(dto.getPhoto1()));
+
+        List<UploadedFile> uploadedFiles = fileService.saveFiles(dto.getFiles());
+        for (UploadedFile file : uploadedFiles) {
+            file.setTemporaryFeedback(entity);
+        }
+
+        entity.setFiles(uploadedFiles);
 
         temporaryFeedbackRepository.save(entity);
+        uploadedFileRepository.saveAll(uploadedFiles);
         return true;
     }
 
@@ -83,8 +95,18 @@ public class FeedbackServiceImpl implements FeedbackService {
     public boolean savePublishedFeedback(TemporaryFeedback entity) {
         PublishedFeedback publishedFeedback = publishedFeedbackMapper.mapTemporaryFeedbackToPublishedFeedback(entity);
         publishedFeedback.setPublishedDate(new Timestamp(System.currentTimeMillis()));
-        publishedFeedbackRepository.save(publishedFeedback);
+
+        uploadedFileRepository.deleteAll(entity.getFiles());
         temporaryFeedbackRepository.delete(entity);
+
+        List<UploadedFile> uploadedFiles = publishedFeedback.getFiles();
+        for (UploadedFile file : uploadedFiles) {
+            file.setTemporaryFeedback(null);
+            file.setPublishedFeedback(publishedFeedback);
+        }
+
+        publishedFeedbackRepository.save(publishedFeedback);
+        uploadedFileRepository.saveAll(publishedFeedback.getFiles());
         return true;
     }
 

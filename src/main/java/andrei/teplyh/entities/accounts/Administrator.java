@@ -6,14 +6,12 @@ import andrei.teplyh.entities.feedbacks.TemporaryFeedback;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
 @Entity(name = "administrators")
 public class Administrator extends Account {
-    @NotNull
-    @Column(name = "ADMIN_ROLE")
+    @Column(name = "ADMIN_ROLE", nullable = false)
     private String adminRole;
 
     /**

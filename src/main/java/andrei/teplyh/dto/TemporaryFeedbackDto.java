@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,8 +27,5 @@ public class TemporaryFeedbackDto {
     private int mileage;
     private String userLogin;
 
-    private MultipartFile photo1;
-    private MultipartFile photo2;
-    private MultipartFile photo3;
-    private MultipartFile photo4;
+    private List<MultipartFile> files;
 }

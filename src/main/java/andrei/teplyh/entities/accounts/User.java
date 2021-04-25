@@ -7,14 +7,12 @@ import andrei.teplyh.entities.feedbacks.TemporaryFeedback;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
 @Entity(name = "users")
 public class User extends Account {
-    @NotNull
-    @Column(name = "USER_ROLE")
+    @Column(name = "USER_ROLE", nullable = false)
     private String userRole;
 
     /**

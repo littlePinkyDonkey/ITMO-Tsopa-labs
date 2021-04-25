@@ -4,7 +4,6 @@ import andrei.teplyh.entities.enums.Roles;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Entity(name = "accounts")
@@ -13,14 +12,12 @@ public class Account {
     @Id
     @Column(name = "ACCOUNT_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long accountId;
+    private Long accountId;
 
-    @NotNull
-    @Column(name = "LOGIN", unique = true)
+    @Column(name = "LOGIN", unique = true, nullable = false)
     private String login;
 
-    @NotNull
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
 
     @Transient

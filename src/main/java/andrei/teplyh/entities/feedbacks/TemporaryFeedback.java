@@ -1,26 +1,29 @@
 package andrei.teplyh.entities.feedbacks;
 
+import andrei.teplyh.entities.UploadedFile;
 import andrei.teplyh.entities.accounts.Administrator;
 import andrei.teplyh.entities.enums.FeedbackStatuses;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity(name = "temporary_reviews")
 public class TemporaryFeedback extends Feedback {
-    @NotNull
-    @Column(name = "FEEDBACK_STATUS")
+    @Column(name = "FEEDBACK_STATUS", nullable = false)
     private String status;
 
     @Transient
     private FeedbackStatuses feedbackStatus;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "INSPECTOR_ID")
+    @JoinColumn(name = "INSPECTOR_ID", nullable = false)
     private Administrator inspector;
+
+    @OneToMany(mappedBy = "temporaryFeedback")
+    private List<UploadedFile> files = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
@@ -35,6 +38,4 @@ public class TemporaryFeedback extends Feedback {
             feedbackStatus = FeedbackStatuses.of(status);
         }
     }
-
-
 }

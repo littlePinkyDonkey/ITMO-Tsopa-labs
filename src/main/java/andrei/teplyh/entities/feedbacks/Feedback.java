@@ -4,7 +4,6 @@ import andrei.teplyh.entities.accounts.User;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -13,10 +12,9 @@ public class Feedback {
     @Id
     @Column(name = "REVIEW_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long reviewId;
+    private Long reviewId;
 
-    @NotNull
-    @Column(name = "MODEL_AND_MARK")
+    @Column(name = "MODEL_AND_MARK", nullable = false)
     private String carModelAndMark;
 
     @Column(name = "MODIFICATIONS")
@@ -26,40 +24,23 @@ public class Feedback {
     @Column(name = "CAR_RELEASE_DATE")
     private Date carReleaseDate;
 
-    @NotNull
-    @Column(name = "REVIEW", length = 1000)
+    @Column(name = "REVIEW", length = 1000, nullable = false)
     private String reviewBody;
 
-    @NotNull
-    @Column(name = "ADVANTAGES", length = 500)
+    @Column(name = "ADVANTAGES", length = 500, nullable = false)
     private String carAdvantages;
 
-    @NotNull
-    @Column(name = "DISADVANTAGES", length = 500)
+    @Column(name = "DISADVANTAGES", length = 500, nullable = false)
     private String carDisadvantages;
 
-    @NotNull
-    @Column(name = "CONCLUSION", length = 500)
+    @Column(name = "CONCLUSION", length = 500, nullable = false)
     private String conclusion;
 
     @Column(name = "OWNERSHIP")
     private String ownership;
 
-    @NotNull
-    @Column(name = "MILEAGE")
+    @Column(name = "MILEAGE", nullable = false)
     private int mileage;
-
-    @Column(name = "PHOTO_1_PATH")
-    private String photo1Path;
-
-    @Column(name = "PHOTO_2_PATH")
-    private String photo2Path;
-
-    @Column(name = "PHOTO_3_PATH")
-    private String photo3Path;
-
-    @Column(name = "PHOTO_4_PATH")
-    private String photo4Path;
 
     @ManyToOne
     @JoinColumn(name = "AUTHOR")

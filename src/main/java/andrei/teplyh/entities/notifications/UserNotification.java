@@ -15,7 +15,7 @@ public class UserNotification {
     @Id
     @Column(name = "MESSAGE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long messageId;
+    private Long messageId;
 
     @NotNull
     @Column(name = "BODY")

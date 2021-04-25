@@ -3,9 +3,7 @@ package andrei.teplyh.mappers;
 import andrei.teplyh.dto.TemporaryFeedbackDto;
 import andrei.teplyh.entities.feedbacks.TemporaryFeedback;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
