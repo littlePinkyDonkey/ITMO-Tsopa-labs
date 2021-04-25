@@ -2,6 +2,7 @@ package andrei.teplyh.services;
 
 import andrei.teplyh.dto.PublishedFeedbackDto;
 import andrei.teplyh.dto.TemporaryFeedbackDto;
+import andrei.teplyh.entities.feedbacks.PublishedFeedback;
 import andrei.teplyh.entities.feedbacks.TemporaryFeedback;
 
 import java.util.List;
@@ -13,7 +14,9 @@ public interface FeedbackService {
 
     void updateTemporaryFeedback(TemporaryFeedback entity);
 
-    TemporaryFeedback getTemporaryFeedbackById(long id);
+    TemporaryFeedback getTemporaryFeedbackById(Long id);
+
+    PublishedFeedback getPublishedFeedbackById(Long id);
 
     List<TemporaryFeedbackDto> getAllTemporaryFeedbacks(Long administratorId);
 

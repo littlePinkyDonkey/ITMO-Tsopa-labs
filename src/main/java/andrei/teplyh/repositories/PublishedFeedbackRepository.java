@@ -9,5 +9,7 @@ import java.util.List;
 
 @Repository
 public interface PublishedFeedbackRepository extends JpaRepository<PublishedFeedback, Long> {
+    PublishedFeedback findPublishedFeedbackByReviewId(long id);
+
     List<PublishedFeedback> findAllByAuthor(User author);
 }

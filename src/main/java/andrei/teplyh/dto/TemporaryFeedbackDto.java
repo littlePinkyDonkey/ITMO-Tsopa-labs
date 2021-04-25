@@ -27,14 +27,7 @@ public class TemporaryFeedbackDto {
     private String userLogin;
 
     private MultipartFile photo1;
-    private String photo1Path;
-
     private MultipartFile photo2;
-    private String photo2Path;
-
     private MultipartFile photo3;
-    private String photo3Path;
-
     private MultipartFile photo4;
-    private String photo4Path;
 }

@@ -16,7 +16,7 @@ import andrei.teplyh.repositories.PublishedFeedbackRepository;
 import andrei.teplyh.repositories.TemporaryFeedbackRepository;
 import andrei.teplyh.services.AdministratorService;
 import andrei.teplyh.services.FeedbackService;
-import andrei.teplyh.services.FileUploadingService;
+import andrei.teplyh.services.FileService;
 import andrei.teplyh.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     private final AdministratorService administratorService;
     private final UserService userService;
-    private final FileUploadingService fileUploadingService;
+    private final FileService fileService;
 
     @Autowired
     public FeedbackServiceImpl(
@@ -44,16 +44,16 @@ public class FeedbackServiceImpl implements FeedbackService {
             PublishedFeedbackMapper publishedFeedbackMapper,
             AdministratorService administratorService,
             UserService userService,
-            FileUploadingService fileUploadingService) {
+            FileService fileService) {
        this.temporaryFeedbackRepository = temporaryFeedbackRepository;
        this.publishedFeedbackRepository = publishedFeedbackRepository;
 
        this.temporaryFeedbackMapper = temporaryFeedbackMapper;
        this.publishedFeedbackMapper = publishedFeedbackMapper;
 
-        this.administratorService = administratorService;
+       this.administratorService = administratorService;
        this.userService = userService;
-        this.fileUploadingService = fileUploadingService;
+       this.fileService = fileService;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         entity.setInspector(inspector);
 
         entity.setFeedbackStatus(FeedbackStatuses.ON_REVISION);
-        entity.setPhoto1Path(dto.getPhoto1Path());
+        entity.setPhoto1Path(fileService.saveFile(dto.getPhoto1()));
 
         temporaryFeedbackRepository.save(entity);
         return true;
@@ -85,7 +85,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         publishedFeedback.setPublishedDate(new Timestamp(System.currentTimeMillis()));
         publishedFeedbackRepository.save(publishedFeedback);
         temporaryFeedbackRepository.delete(entity);
-        return false;
+        return true;
     }
 
     @Override
@@ -94,8 +94,13 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public TemporaryFeedback getTemporaryFeedbackById(long id) {
+    public TemporaryFeedback getTemporaryFeedbackById(Long id) {
         return temporaryFeedbackRepository.findTemporaryFeedbackByReviewId(id);
+    }
+
+    @Override
+    public PublishedFeedback getPublishedFeedbackById(Long id) {
+        return publishedFeedbackRepository.findPublishedFeedbackByReviewId(id);
     }
 
     @Override
