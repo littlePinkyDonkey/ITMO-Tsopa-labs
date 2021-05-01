@@ -11,7 +11,7 @@
 uploads/**
 src/main/java/andrei/teplyh/controllers/A.java
 
-
+src/main/resources/application-hell.properties
 
 # User-specific stuff
 .idea/**/workspace.xml

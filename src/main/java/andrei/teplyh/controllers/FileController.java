@@ -1,6 +1,8 @@
 package andrei.teplyh.controllers;
 
 import andrei.teplyh.services.FileService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import java.io.FileNotFoundException;
 
 @RestController
 @RequestMapping(path = "/api/file")
+@Api(tags = {"files"}, description = "Управление прикреплёнными файлами")
 public class FileController {
     private final FileService fileService;
 
@@ -24,6 +27,7 @@ public class FileController {
     }
 
     @GetMapping(path = "/temporary")
+    @ApiOperation("Получить файл из неопубликованного отзыва")
     public ResponseEntity getTemporaryFile(@RequestParam(name = "reviewId") Long reviewId,
                                            @RequestParam(name = "fileNumber") Long fileNumber) {
         try {
@@ -39,6 +43,7 @@ public class FileController {
     }
 
     @GetMapping(path = "/published")
+    @ApiOperation("Получить файл из опубликованного отзыва")
     public ResponseEntity getPublishedFile(@RequestParam(name = "reviewId") Long reviewId,
                                            @RequestParam(name = "fileNumber") Long fileNumber) {
         try {

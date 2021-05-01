@@ -4,6 +4,8 @@ import andrei.teplyh.dto.TemporaryFeedbackDto;
 import andrei.teplyh.exceptions.NoPermossionsException;
 import andrei.teplyh.exceptions.UserNotFoundException;
 import andrei.teplyh.services.FeedbackService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/temporary")
+@Api(tags = {"temporary"}, description = "Управление неопубликованными отзывами")
 public class TemporaryFeedbackController {
     private final FeedbackService feedbackService;
 
@@ -21,6 +24,7 @@ public class TemporaryFeedbackController {
         this.feedbackService = feedbackService;
     }
 
+    @ApiOperation("Написать новый отзыв")
     @PostMapping(path = "/create", produces = "application/json")
     public ResponseEntity createFeedback(@ModelAttribute TemporaryFeedbackDto dto) {
         try {
@@ -37,6 +41,7 @@ public class TemporaryFeedbackController {
         }
     }
 
+    @ApiOperation("Получить все отзывы, ожидающие проверки")
     @GetMapping(path = "/all", produces = "application/json")
     public ResponseEntity getTemporaryFeedbacks(@RequestParam(name = "id") Long administratorId) {
         List<TemporaryFeedbackDto> temporaryFeedbackDtoList =
@@ -49,6 +54,7 @@ public class TemporaryFeedbackController {
         }
     }
 
+    @ApiOperation("обновить содержание отзыва")
     @PutMapping(path = "/update", produces = "application/json")
     public ResponseEntity updateTemporaryFeedback(@ModelAttribute TemporaryFeedbackDto dto) {
         try {

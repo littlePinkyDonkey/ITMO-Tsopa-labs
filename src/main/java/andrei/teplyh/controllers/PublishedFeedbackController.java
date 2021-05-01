@@ -2,6 +2,8 @@ package andrei.teplyh.controllers;
 
 import andrei.teplyh.dto.PublishedFeedbackDto;
 import andrei.teplyh.services.FeedbackService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/published")
+@Api(tags = {"published"}, description = "Упарвление опубликованными отзывами")
 public class PublishedFeedbackController {
     private final FeedbackService feedbackService;
 
@@ -22,6 +25,7 @@ public class PublishedFeedbackController {
         this.feedbackService = feedbackService;
     }
 
+    @ApiOperation("олучить все опубликованные отзывы")
     @GetMapping(path = "/all", produces = "application/json")
     public ResponseEntity getPublishedFeedbacks(@RequestParam(name = "id") Long userId) {
         List<PublishedFeedbackDto> publishedFeedbackDtoList = feedbackService.getAllPublishedFeedbacks(userId);
