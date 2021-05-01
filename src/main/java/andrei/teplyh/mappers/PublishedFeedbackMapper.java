@@ -13,6 +13,7 @@ import java.util.List;
 
 @Component
 public class PublishedFeedbackMapper {
+
     public PublishedFeedback mapTemporaryFeedbackToPublishedFeedback(TemporaryFeedback temporaryFeedback) {
         PublishedFeedback publishedFeedback = new PublishedFeedback();
 
@@ -44,6 +45,7 @@ public class PublishedFeedbackMapper {
         dto.setOwnership(entity.getOwnership());
         dto.setMileage(entity.getMileage());
         dto.setUserLogin(entity.getAuthor().getLogin());
+        dto.setFilesCount(entity.getFiles().size());
 
         return dto;
     }

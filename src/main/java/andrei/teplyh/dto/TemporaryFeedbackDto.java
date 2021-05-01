@@ -28,4 +28,5 @@ public class TemporaryFeedbackDto {
     private String userLogin;
 
     private List<MultipartFile> files;
+    private Integer filesCount;
 }

@@ -43,6 +43,7 @@ public class TemporaryFeedbackMapper {
         dto.setOwnership(entity.getOwnership());
         dto.setMileage(entity.getMileage());
         dto.setUserLogin(entity.getAuthor().getLogin());
+        dto.setFilesCount(entity.getFiles().size());
 
         return dto;
     }
@@ -55,6 +56,17 @@ public class TemporaryFeedbackMapper {
         }
 
         return temporaryFeedbackDtoList;
+    }
 
+    public void updateEntity(TemporaryFeedback entity, TemporaryFeedbackDto dto) {
+        entity.setCarModelAndMark(dto.getCarModelAndMark());
+        entity.setCarModification(dto.getCarModification());
+        entity.setCarReleaseDate(Date.from(dto.getCarReleaseDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        entity.setReviewBody(dto.getReviewBody());
+        entity.setCarAdvantages(dto.getCarAdvantages());
+        entity.setCarDisadvantages(dto.getCarDisadvantages());
+        entity.setConclusion(dto.getConclusion());
+        entity.setOwnership(dto.getOwnership());
+        entity.setMileage(dto.getMileage());
     }
 }

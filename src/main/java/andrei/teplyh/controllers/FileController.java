@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.FileNotFoundException;
 
 @RestController
-@RequestMapping(path = "/file")
+@RequestMapping(path = "/api/file")
 public class FileController {
     private final FileService fileService;
 

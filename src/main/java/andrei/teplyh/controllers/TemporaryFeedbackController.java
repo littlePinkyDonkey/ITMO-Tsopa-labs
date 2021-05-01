@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/temporary")
+@RequestMapping(path = "/api/temporary")
 public class TemporaryFeedbackController {
     private final FeedbackService feedbackService;
 
@@ -28,7 +28,7 @@ public class TemporaryFeedbackController {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             if (e.getClass() == UserNotFoundException.class) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
             } else if (e.getClass() == NoPermossionsException.class) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
             } else {
@@ -46,6 +46,16 @@ public class TemporaryFeedbackController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(temporaryFeedbackDtoList);
+        }
+    }
+
+    @PutMapping(path = "/update", produces = "application/json")
+    public ResponseEntity updateTemporaryFeedback(@ModelAttribute TemporaryFeedbackDto dto) {
+        try {
+            feedbackService.updateTemporaryFeedback(dto);
+            return ResponseEntity.ok().build();
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }

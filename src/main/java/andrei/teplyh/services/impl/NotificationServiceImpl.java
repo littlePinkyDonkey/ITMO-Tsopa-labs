@@ -15,6 +15,8 @@ import andrei.teplyh.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -53,6 +55,8 @@ public class NotificationServiceImpl implements NotificationService {
         User author = feedback.getAuthor();
         author.getUserNotifications().add(userNotification);
 
+        userNotification.setDateOfSending(new Timestamp(new Date().getTime()));
+
         userNotificationRepository.save(userNotification);
 
         updateFeedbackInfo(feedback, dto.getRevisionResult());
@@ -78,10 +82,10 @@ public class NotificationServiceImpl implements NotificationService {
             feedbackService.savePublishedFeedback(feedback);
         } else if (revisionResult.equals("rejected")) {
             feedback.setFeedbackStatus(FeedbackStatuses.REJECTED);
-            feedbackService.updateTemporaryFeedback(feedback);
+            feedbackService.updateTemporaryFeedbackStatus(feedback);
         } else {
             feedback.setFeedbackStatus(FeedbackStatuses.EDITS_NEEDED);
-            feedbackService.updateTemporaryFeedback(feedback);
+            feedbackService.updateTemporaryFeedbackStatus(feedback);
         }
     }
 }

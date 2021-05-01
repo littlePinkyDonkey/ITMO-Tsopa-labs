@@ -12,7 +12,7 @@ public interface FeedbackService {
 
     boolean savePublishedFeedback(TemporaryFeedback entity);
 
-    void updateTemporaryFeedback(TemporaryFeedback entity);
+    void updateTemporaryFeedbackStatus(TemporaryFeedback entity);
 
     TemporaryFeedback getTemporaryFeedbackById(Long id);
 
@@ -21,4 +21,6 @@ public interface FeedbackService {
     List<TemporaryFeedbackDto> getAllTemporaryFeedbacks(Long administratorId);
 
     List<PublishedFeedbackDto> getAllPublishedFeedbacks(Long userId);
+
+    boolean updateTemporaryFeedback(TemporaryFeedbackDto dto) throws NullPointerException;
 }

@@ -27,4 +27,5 @@ public class PublishedFeedbackDto {
     private String userLogin;
 
     private List<MultipartFile> files;
+    private Integer filesCount;
 }

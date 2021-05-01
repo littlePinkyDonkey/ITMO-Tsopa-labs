@@ -111,7 +111,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public void updateTemporaryFeedback(TemporaryFeedback entity) {
+    public void updateTemporaryFeedbackStatus(TemporaryFeedback entity) {
         temporaryFeedbackRepository.save(entity);
     }
 
@@ -141,5 +141,21 @@ public class FeedbackServiceImpl implements FeedbackService {
         List<PublishedFeedback> publishedFeedbacks = publishedFeedbackRepository.findAllByAuthor(author);
 
         return publishedFeedbackMapper.listEntityToListDto(publishedFeedbacks);
+    }
+
+    @Override
+    public boolean updateTemporaryFeedback(TemporaryFeedbackDto dto) throws NullPointerException {
+        TemporaryFeedback temporaryFeedback =
+                temporaryFeedbackRepository.findTemporaryFeedbackByReviewId(dto.getReviewId());
+
+        if (temporaryFeedback == null) {
+            throw new NullPointerException("No such feedback");
+        }
+
+        temporaryFeedbackMapper.updateEntity(temporaryFeedback, dto);
+
+        temporaryFeedbackRepository.save(temporaryFeedback);
+
+        return false;
     }
 }

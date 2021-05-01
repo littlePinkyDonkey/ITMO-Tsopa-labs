@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/notification")
+@RequestMapping(path = "/api/notification")
 public class NotificationController {
     private final NotificationService notificationService;
 
@@ -30,7 +30,7 @@ public class NotificationController {
         List<UserNotificationDto> notifications = notificationService.getAllNotifications(userId);
 
         if (notifications.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("You don't have any notifications");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(notifications);
         }
