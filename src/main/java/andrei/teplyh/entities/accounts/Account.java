@@ -1,9 +1,10 @@
 package andrei.teplyh.entities.accounts;
 
-import andrei.teplyh.entities.enums.Roles;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity(name = "accounts")
@@ -20,6 +21,12 @@ public class Account {
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @Transient
-    private Roles role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "accounts_roles",
+            joinColumns = @JoinColumn(name = "ACCOUNT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROLE_VALUE")
+    )
+    private List<Role> roles = new ArrayList<>();
+
 }

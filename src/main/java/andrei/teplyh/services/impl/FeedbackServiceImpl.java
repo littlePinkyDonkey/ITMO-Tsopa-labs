@@ -6,10 +6,8 @@ import andrei.teplyh.entities.UploadedFile;
 import andrei.teplyh.entities.accounts.Administrator;
 import andrei.teplyh.entities.accounts.User;
 import andrei.teplyh.entities.enums.FeedbackStatuses;
-import andrei.teplyh.entities.enums.Roles;
 import andrei.teplyh.entities.feedbacks.PublishedFeedback;
 import andrei.teplyh.entities.feedbacks.TemporaryFeedback;
-import andrei.teplyh.exceptions.NoPermossionsException;
 import andrei.teplyh.exceptions.UserNotFoundException;
 import andrei.teplyh.mappers.TemporaryFeedbackMapper;
 import andrei.teplyh.mappers.PublishedFeedbackMapper;
@@ -68,9 +66,6 @@ public class FeedbackServiceImpl implements FeedbackService {
         User author = userService.findUserByLogin(dto.getUserLogin());
         if (author == null) {
             throw new UserNotFoundException("No such user exception");
-        }
-        if (author.getRole() == Roles.BANNED_USER) {
-            throw new NoPermossionsException("You don't have permissions to do this action");
         }
         entity.setAuthor(author);
 
