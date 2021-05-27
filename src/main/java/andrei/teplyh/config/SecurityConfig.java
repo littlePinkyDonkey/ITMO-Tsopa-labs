@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers("/admin").permitAll()
 
                 .antMatchers("/api/temporary/all").hasAnyRole(AccountRoles.ADMIN.getSecurityRole(), AccountRoles.USER.getSecurityRole())
-                .antMatchers("/api/temporary/create").permitAll()
+                .antMatchers("/api/temporary/create").hasRole(AccountRoles.USER.getSecurityRole())
                 .antMatchers("/api/temporary/update").hasRole(AccountRoles.USER.getSecurityRole())
 
                 .antMatchers("/api/file/temporary").hasAnyRole(AccountRoles.ADMIN.getSecurityRole(), AccountRoles.USER.getSecurityRole())
