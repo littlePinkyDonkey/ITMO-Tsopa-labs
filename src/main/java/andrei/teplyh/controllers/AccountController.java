@@ -33,7 +33,7 @@ public class AccountController {
         this.authenticationService = authenticationService;
     }
 
-    @ApiOperation("Регистрация пользователя")
+    @ApiOperation(value = "Регистрация пользователя")
     @PostMapping(path = "/signUp", produces = "application/json")
     public ResponseEntity register(@RequestBody AccountDto dto) {
         try {
@@ -45,7 +45,7 @@ public class AccountController {
         }
     }
 
-    @ApiOperation("Аутентификация пользователя")
+    @ApiOperation(value = "Аутентификация пользователя")
     @PostMapping(path = "/signIn", produces = "application/json")
     public ResponseEntity auth(@RequestBody AccountDto dto) {
         try {

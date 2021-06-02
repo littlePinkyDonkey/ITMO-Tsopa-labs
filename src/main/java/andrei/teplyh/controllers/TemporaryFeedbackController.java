@@ -6,6 +6,7 @@ import andrei.teplyh.exceptions.UserNotFoundException;
 import andrei.teplyh.services.FeedbackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,8 @@ public class TemporaryFeedbackController {
         this.feedbackService = feedbackService;
     }
 
-    @ApiOperation("Написать новый отзыв")
     @PostMapping(path = "/create", produces = "application/json")
+    @ApiOperation(value = "Написать новый отзыв", authorizations = @Authorization("USER"))
     public ResponseEntity createFeedback(@ModelAttribute TemporaryFeedbackDto dto) {
         try {
             feedbackService.saveNewTemporaryFeedback(dto);
@@ -41,8 +42,8 @@ public class TemporaryFeedbackController {
         }
     }
 
-    @ApiOperation("Получить все отзывы, ожидающие проверки")
     @GetMapping(path = "/all", produces = "application/json")
+    @ApiOperation(value = "Получить все отзывы, ожидающие проверки", authorizations = {@Authorization("ADMIN"), @Authorization("USER")})
     public ResponseEntity getTemporaryFeedbacks(@RequestParam(name = "id") Long administratorId) {
         List<TemporaryFeedbackDto> temporaryFeedbackDtoList =
                 feedbackService.getAllTemporaryFeedbacks(administratorId);
@@ -54,8 +55,8 @@ public class TemporaryFeedbackController {
         }
     }
 
-    @ApiOperation("обновить содержание отзыва")
     @PutMapping(path = "/update", produces = "application/json")
+    @ApiOperation(value = "обновить содержание отзыва", authorizations = @Authorization("USER"))
     public ResponseEntity updateTemporaryFeedback(@ModelAttribute TemporaryFeedbackDto dto) {
         try {
             feedbackService.updateTemporaryFeedback(dto);

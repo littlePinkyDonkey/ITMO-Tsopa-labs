@@ -3,6 +3,7 @@ package andrei.teplyh.controllers;
 import andrei.teplyh.services.FileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,8 @@ public class FileController {
     }
 
     @GetMapping(path = "/temporary")
-    @ApiOperation("Получить файл из неопубликованного отзыва")
+    @ApiOperation(value = "Получить файл из неопубликованного отзыва",
+            authorizations = {@Authorization("ADMIN"), @Authorization("USER")})
     public ResponseEntity getTemporaryFile(@RequestParam(name = "reviewId") Long reviewId,
                                            @RequestParam(name = "fileNumber") Long fileNumber) {
         try {
@@ -43,7 +45,7 @@ public class FileController {
     }
 
     @GetMapping(path = "/published")
-    @ApiOperation("Получить файл из опубликованного отзыва")
+    @ApiOperation(value = "Получить файл из опубликованного отзыва")
     public ResponseEntity getPublishedFile(@RequestParam(name = "reviewId") Long reviewId,
                                            @RequestParam(name = "fileNumber") Long fileNumber) {
         try {
