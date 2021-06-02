@@ -9,6 +9,12 @@ public enum AccountRoles {
             return "ROLE_USER";
         }
     },
+    BANNED_USER("BANNED_USER") {
+        @Override
+        public String toString() {
+            return "ROLE_BANNED_USER";
+        }
+    },
     ADMIN("ADMIN") {
         @Override
         public String toString() {

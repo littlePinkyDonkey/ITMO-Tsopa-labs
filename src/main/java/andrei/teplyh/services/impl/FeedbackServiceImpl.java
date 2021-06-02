@@ -20,6 +20,7 @@ import andrei.teplyh.services.FileService;
 import andrei.teplyh.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -60,6 +61,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    @Transactional
     public boolean saveNewTemporaryFeedback(TemporaryFeedbackDto dto) throws Exception {
         TemporaryFeedback entity = temporaryFeedbackMapper.dtoToEntity(dto);
 
@@ -106,8 +108,25 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    @Transactional
     public void updateTemporaryFeedbackStatus(TemporaryFeedback entity) {
         temporaryFeedbackRepository.save(entity);
+    }
+
+    @Override
+    @Transactional
+    public boolean updateTemporaryFeedback(TemporaryFeedbackDto dto) throws NullPointerException {
+        TemporaryFeedback temporaryFeedback =
+                temporaryFeedbackRepository.findTemporaryFeedbackByReviewId(dto.getReviewId());
+
+        if (temporaryFeedback == null) {
+            throw new NullPointerException("No such feedback");
+        }
+
+        temporaryFeedbackMapper.updateEntity(temporaryFeedback, dto);
+        temporaryFeedbackRepository.save(temporaryFeedback);
+
+        return false;
     }
 
     @Override
@@ -136,21 +155,5 @@ public class FeedbackServiceImpl implements FeedbackService {
         List<PublishedFeedback> publishedFeedbacks = publishedFeedbackRepository.findAllByAuthor(author);
 
         return publishedFeedbackMapper.listEntityToListDto(publishedFeedbacks);
-    }
-
-    @Override
-    public boolean updateTemporaryFeedback(TemporaryFeedbackDto dto) throws NullPointerException {
-        TemporaryFeedback temporaryFeedback =
-                temporaryFeedbackRepository.findTemporaryFeedbackByReviewId(dto.getReviewId());
-
-        if (temporaryFeedback == null) {
-            throw new NullPointerException("No such feedback");
-        }
-
-        temporaryFeedbackMapper.updateEntity(temporaryFeedback, dto);
-
-        temporaryFeedbackRepository.save(temporaryFeedback);
-
-        return false;
     }
 }

@@ -9,6 +9,7 @@ import andrei.teplyh.services.UserService;
 import andrei.teplyh.services.auth.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -28,6 +29,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
+    @Transactional
     public void signUp(AccountDto accountDto) throws UserAlreadyExistsException {
         Account account = accountService.findAccountByLogin(accountDto.getLogin());
         if (account != null) {

@@ -5,6 +5,8 @@ import andrei.teplyh.exceptions.UserAlreadyExistsException;
 import andrei.teplyh.exceptions.UserNotFoundException;
 import andrei.teplyh.services.auth.AuthenticationService;
 import andrei.teplyh.services.auth.RegistrationService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/account")
+@Api(tags = {"accounts"}, description = "Уаправление аккаунтами")
 public class AccountController {
     private final RegistrationService registrationService;
     private final AuthenticationService authenticationService;
@@ -30,6 +33,7 @@ public class AccountController {
         this.authenticationService = authenticationService;
     }
 
+    @ApiOperation("Регистрация пользователя")
     @PostMapping(path = "/signUp", produces = "application/json")
     public ResponseEntity register(@RequestBody AccountDto dto) {
         try {
@@ -41,6 +45,7 @@ public class AccountController {
         }
     }
 
+    @ApiOperation("Аутентификация пользователя")
     @PostMapping(path = "/signIn", produces = "application/json")
     public ResponseEntity auth(@RequestBody AccountDto dto) {
         try {

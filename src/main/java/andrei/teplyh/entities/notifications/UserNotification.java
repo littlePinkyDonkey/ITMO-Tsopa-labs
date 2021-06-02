@@ -40,7 +40,6 @@ public class UserNotification {
     /**
      * список пользователей, которым нужно отправить уведомление
      **/
-    @NotNull
     @ManyToMany
     @JoinTable(
             name = "messages_recipients",
