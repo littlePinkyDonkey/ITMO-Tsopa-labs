@@ -1,5 +1,7 @@
 package andrei.teplyh.repositories.impl;
 
+import andrei.teplyh.entities.accounts.Account;
+import andrei.teplyh.entities.accounts.Role;
 import andrei.teplyh.entities.accounts.User;
 import andrei.teplyh.repositories.LoggerRepository;
 import org.springframework.stereotype.Repository;
@@ -19,11 +21,12 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 @Repository
 public class LoggerRepositoryImpl implements LoggerRepository {
     @Override
-    public void log(String fileName, User user) {
+    public void log(String fileName, Account user) {
         try {
             Document document = getDocument(fileName);
             Element root = document.getDocumentElement();
@@ -38,8 +41,17 @@ public class LoggerRepositoryImpl implements LoggerRepository {
             Element password = document.createElement("password");
             password.appendChild(document.createTextNode(user.getPassword()));
 
+            Element roles = document.createElement("roles");
+            Element role = document.createElement("role");
+            List<Role> userRoles = user.getRoles();
+            for (Role r : userRoles) {
+                role.appendChild(document.createTextNode(r.getRole()));
+                roles.appendChild(role);
+            }
+
             newUser.appendChild(login);
             newUser.appendChild(password);
+            newUser.appendChild(roles);
 
             root.appendChild(newUser);
 

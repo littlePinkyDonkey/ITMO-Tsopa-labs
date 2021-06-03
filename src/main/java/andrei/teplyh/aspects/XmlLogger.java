@@ -1,6 +1,7 @@
 package andrei.teplyh.aspects;
 
 import andrei.teplyh.annotations.LogXML;
+import andrei.teplyh.entities.accounts.Account;
 import andrei.teplyh.entities.accounts.User;
 import andrei.teplyh.repositories.LoggerRepository;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -31,6 +32,6 @@ public class XmlLogger {
 
     @AfterReturning(pointcut = "log(logXML)", returning = "retVal")
     public void afterReturning(Object retVal, LogXML logXML) {
-        loggerRepository.log(filePath, (User) retVal);
+        loggerRepository.log(filePath, (Account) retVal);
     }
 }
