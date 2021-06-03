@@ -1,7 +1,9 @@
 package andrei.teplyh.services.impl.auth;
 
+import andrei.teplyh.annotations.LogXML;
 import andrei.teplyh.dto.AccountDto;
 import andrei.teplyh.entities.accounts.Account;
+import andrei.teplyh.entities.accounts.User;
 import andrei.teplyh.exceptions.UserAlreadyExistsException;
 import andrei.teplyh.mappers.RegistrationMapper;
 import andrei.teplyh.services.AccountService;
@@ -28,14 +30,15 @@ public class RegistrationServiceImpl implements RegistrationService {
         this.mapper = mapper;
     }
 
+    @LogXML
     @Override
     @Transactional
-    public void signUp(AccountDto accountDto) throws UserAlreadyExistsException {
+    public User signUp(AccountDto accountDto) throws UserAlreadyExistsException {
         Account account = accountService.findAccountByLogin(accountDto.getLogin());
         if (account != null) {
             throw new UserAlreadyExistsException("User already exists");
         }
 
-        userService.registerUser(mapper.dtoToEntity(accountDto));
+        return userService.registerUser(mapper.dtoToEntity(accountDto));
     }
 }
