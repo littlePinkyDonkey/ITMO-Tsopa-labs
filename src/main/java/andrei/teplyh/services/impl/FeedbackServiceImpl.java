@@ -18,12 +18,15 @@ import andrei.teplyh.services.AdministratorService;
 import andrei.teplyh.services.FeedbackService;
 import andrei.teplyh.services.FileService;
 import andrei.teplyh.services.UserService;
+import andrei.teplyh.util.Cache;
+import andrei.teplyh.util.CacheData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
@@ -38,6 +41,8 @@ public class FeedbackServiceImpl implements FeedbackService {
     private final UserService userService;
     private final FileService fileService;
 
+    private final Cache cache;
+
     @Autowired
     public FeedbackServiceImpl(
             TemporaryFeedbackRepository temporaryFeedbackRepository,
@@ -47,7 +52,8 @@ public class FeedbackServiceImpl implements FeedbackService {
             PublishedFeedbackMapper publishedFeedbackMapper,
             AdministratorService administratorService,
             UserService userService,
-            FileService fileService) {
+            FileService fileService,
+            Cache cache) {
        this.temporaryFeedbackRepository = temporaryFeedbackRepository;
        this.publishedFeedbackRepository = publishedFeedbackRepository;
        this.uploadedFileRepository = uploadedFileRepository;
@@ -58,6 +64,8 @@ public class FeedbackServiceImpl implements FeedbackService {
        this.administratorService = administratorService;
        this.userService = userService;
        this.fileService = fileService;
+
+       this.cache = cache;
     }
 
     @Override
@@ -85,6 +93,15 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         temporaryFeedbackRepository.save(entity);
         uploadedFileRepository.saveAll(uploadedFiles);
+
+        Map<String, CacheData> cacheDataMap = cache.getAdminsCache();
+        if (cacheDataMap.containsKey(inspector.getLogin())) {
+            CacheData data = cacheDataMap.get(inspector.getLogin());
+            data.setTemporaryFeedbacksCount(data.getTemporaryFeedbacksCount() + 1);
+        } else {
+            cacheDataMap.put(inspector.getLogin(), new CacheData(1, inspector.getEmail()));
+        }
+
         return true;
     }
 
@@ -95,6 +112,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         uploadedFileRepository.deleteAll(entity.getFiles());
         temporaryFeedbackRepository.delete(entity);
+
+        Map<String, CacheData> cacheDataMap = cache.getAdminsCache();
+        CacheData data = cacheDataMap.get(entity.getInspector().getLogin());
+        data.setTemporaryFeedbacksCount(data.getTemporaryFeedbacksCount() - 1);
 
         List<UploadedFile> uploadedFiles = publishedFeedback.getFiles();
         for (UploadedFile file : uploadedFiles) {

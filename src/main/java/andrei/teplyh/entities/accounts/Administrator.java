@@ -11,6 +11,9 @@ import java.util.List;
 @Entity(name = "administrators")
 public class Administrator extends Account {
 
+    @Column(name = "EMAIL", nullable = false)
+    private String email;
+
     /**
      * писок отзывов, которые необходимо просмотреть
      **/
