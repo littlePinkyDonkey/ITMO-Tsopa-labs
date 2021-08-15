@@ -9,15 +9,15 @@
 .idea/**
 
 uploads/**
-src/main/java/andrei/teplyh/controllers/A.java
-src/main/java/andrei/teplyh/controllers/RolesController.java
-src/main/java/andrei/teplyh/repositories/RolesRepository.java
-src/main/java/andrei/teplyh/services/RolesService.java
-src/main/java/andrei/teplyh/services/impl/RolesServiceImpl.java
-src/main/java/andrei/teplyh/mappers/RolesMapper.java
+main-node/src/main/java/andrei/teplyh/controllers/A.java
+main-node/src/main/java/andrei/teplyh/controllers/RolesController.java
+main-node/src/main/java/andrei/teplyh/repositories/RolesRepository.java
+main-node/src/main/java/andrei/teplyh/services/RolesService.java
+main-node/src/main/java/andrei/teplyh/services/impl/RolesServiceImpl.java
+main-node/src/main/java/andrei/teplyh/mappers/RolesMapper.java
 users.xml
 
-src/main/resources/application-hell.properties
+main-node/src/main/resources/application-hell.properties
 
 # User-specific stuff
 .idea/**/workspace.xml
