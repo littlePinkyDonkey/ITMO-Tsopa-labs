@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CacheData {
-    private int temporaryFeedbacksCount;
+    private Integer temporaryFeedbacksCount;
     private String adminEmail;
 }
