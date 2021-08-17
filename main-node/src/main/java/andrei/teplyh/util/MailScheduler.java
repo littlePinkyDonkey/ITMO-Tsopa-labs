@@ -23,7 +23,7 @@ public class MailScheduler {
         this.mailMapper = mailMapper;
     }
 
-    @Scheduled(cron = "*/20 * * * * *")
+    @Scheduled(cron = "*/60 * * * * *")
     public void schedule() {
         List<MailDto> admins = mailMapper.toDto(cache);
         for(MailDto mailDto : admins) {

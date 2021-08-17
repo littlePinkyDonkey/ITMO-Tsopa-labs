@@ -35,7 +35,7 @@ public class KafkaServiceImpl implements KafkaService {
         try {
             ProducerRecord<String, String> record = new ProducerRecord<>(property.getTopic(), msg);
             RecordMetadata metadata = producer.send(record).get();
-            System.out.printf("value = %s\n", record.value());
+//            System.out.printf("value = %s\n", record.value());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
