@@ -61,10 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers("/api/published/all").hasAnyRole(AccountRoles.USER.getSecurityRole(),
                                                                          AccountRoles.BANNED_USER.getSecurityRole())
 
-                .antMatchers("/api/roles/all").hasRole(AccountRoles.ADMIN.getSecurityRole())
-                .antMatchers("/api/roles/addAdmin").hasRole(AccountRoles.ADMIN.getSecurityRole())
-                .antMatchers("/api/roles/ban").hasRole(AccountRoles.ADMIN.getSecurityRole())
-
                 .anyRequest().authenticated()
 
                 .and()
