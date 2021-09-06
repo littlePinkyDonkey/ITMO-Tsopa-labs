@@ -39,6 +39,6 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new UserAlreadyExistsException("User already exists");
         }
 
-        return userService.registerUser(mapper.dtoToEntity(accountDto));
+        return userService.registerUser((User) mapper.dtoToEntity(accountDto));
     }
 }

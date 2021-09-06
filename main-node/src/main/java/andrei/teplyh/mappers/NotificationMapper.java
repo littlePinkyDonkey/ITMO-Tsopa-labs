@@ -8,36 +8,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class NotificationMapper {
-
-    public UserNotification dtoToEntity(UserNotificationDto dto) {
-        UserNotification entity = new UserNotification();
-
-        entity.setNotificationBody(dto.getNotificationBody());
-        entity.setDateOfSending(dto.getDateOfSending());
-        entity.setRevisionResult(dto.getRevisionResult());
-
-        return entity;
-    }
-
-    public UserNotificationDto entityToDto(UserNotification entity) {
-        UserNotificationDto dto = new UserNotificationDto();
-
-        dto.setNotificationBody(entity.getNotificationBody());
-        dto.setDateOfSending(entity.getDateOfSending());
-        dto.setRevisionResult(entity.getRevisionResult());
-        dto.setSender(entity.getSender().getLogin());
-
-        return dto;
-    }
+public class NotificationMapper implements Mapper {
 
     public List<UserNotificationDto> entityListToDtoList(List<UserNotification> entities) {
         List<UserNotificationDto> dtoList = new ArrayList<>();
 
         for (UserNotification entity : entities) {
-            dtoList.add(entityToDto(entity));
+            dtoList.add((UserNotificationDto) entityToDto(entity));
         }
 
         return dtoList;
+    }
+
+    @Override
+    public Object dtoToEntity(Object dto) {
+        UserNotification entity = new UserNotification();
+        UserNotificationDto userNotificationDto = (UserNotificationDto) dto;
+
+        entity.setNotificationBody(userNotificationDto.getNotificationBody());
+        entity.setDateOfSending(userNotificationDto.getDateOfSending());
+        entity.setRevisionResult(userNotificationDto.getRevisionResult());
+
+        return entity;
+    }
+
+    @Override
+    public Object entityToDto(Object entity) {
+        UserNotificationDto dto = new UserNotificationDto();
+        UserNotification userNotification = (UserNotification) entity;
+
+        dto.setNotificationBody(userNotification.getNotificationBody());
+        dto.setDateOfSending(userNotification.getDateOfSending());
+        dto.setRevisionResult(userNotification.getRevisionResult());
+        dto.setSender(userNotification.getSender().getLogin());
+
+        return dto;
     }
 }

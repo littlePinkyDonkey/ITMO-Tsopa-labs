@@ -71,7 +71,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     @Transactional
     public boolean saveNewTemporaryFeedback(TemporaryFeedbackDto dto) throws Exception {
-        TemporaryFeedback entity = temporaryFeedbackMapper.dtoToEntity(dto);
+        TemporaryFeedback entity = (TemporaryFeedback) temporaryFeedbackMapper.dtoToEntity(dto);
 
         User author = userService.findUserByLogin(dto.getUserLogin());
         if (author == null) {

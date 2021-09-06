@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class PublishedFeedbackMapper {
+public class PublishedFeedbackMapper implements Mapper {
 
     public PublishedFeedback mapTemporaryFeedbackToPublishedFeedback(TemporaryFeedback temporaryFeedback) {
         PublishedFeedback publishedFeedback = new PublishedFeedback();
@@ -32,32 +32,38 @@ public class PublishedFeedbackMapper {
         return publishedFeedback;
     }
 
-    public PublishedFeedbackDto entityToDto(PublishedFeedback entity) {
-        PublishedFeedbackDto dto = new PublishedFeedbackDto();
-
-        dto.setCarModelAndMark(entity.getCarModelAndMark());
-        dto.setCarModification(entity.getCarModification());
-        dto.setCarReleaseDate(LocalDate.from(new Date(entity.getCarReleaseDate().getTime()).toInstant().atZone(ZoneId.systemDefault())));
-        dto.setReviewBody(entity.getReviewBody());
-        dto.setCarAdvantages(entity.getCarAdvantages());
-        dto.setCarDisadvantages(entity.getCarDisadvantages());
-        dto.setConclusion(entity.getConclusion());
-        dto.setOwnership(entity.getOwnership());
-        dto.setMileage(entity.getMileage());
-        dto.setUserLogin(entity.getAuthor().getLogin());
-        dto.setFilesCount(entity.getFiles().size());
-
-        return dto;
-    }
-
     public List<PublishedFeedbackDto> listEntityToListDto(List<PublishedFeedback> entities) {
         List<PublishedFeedbackDto> publishedFeedbackDtoList = new ArrayList<>();
 
         for (PublishedFeedback entity : entities) {
-            publishedFeedbackDtoList.add(entityToDto(entity));
+            publishedFeedbackDtoList.add((PublishedFeedbackDto) entityToDto(entity));
         }
 
         return publishedFeedbackDtoList;
     }
 
+    @Override
+    public Object dtoToEntity(Object dto) {
+        return null;
+    }
+
+    @Override
+    public Object entityToDto(Object entity) {
+        PublishedFeedbackDto dto = new PublishedFeedbackDto();
+        PublishedFeedback publishedFeedback = (PublishedFeedback) entity;
+
+        dto.setCarModelAndMark(publishedFeedback.getCarModelAndMark());
+        dto.setCarModification(publishedFeedback.getCarModification());
+        dto.setCarReleaseDate(LocalDate.from(new Date(publishedFeedback.getCarReleaseDate().getTime()).toInstant().atZone(ZoneId.systemDefault())));
+        dto.setReviewBody(publishedFeedback.getReviewBody());
+        dto.setCarAdvantages(publishedFeedback.getCarAdvantages());
+        dto.setCarDisadvantages(publishedFeedback.getCarDisadvantages());
+        dto.setConclusion(publishedFeedback.getConclusion());
+        dto.setOwnership(publishedFeedback.getOwnership());
+        dto.setMileage(publishedFeedback.getMileage());
+        dto.setUserLogin(publishedFeedback.getAuthor().getLogin());
+        dto.setFilesCount(publishedFeedback.getFiles().size());
+
+        return dto;
+    }
 }

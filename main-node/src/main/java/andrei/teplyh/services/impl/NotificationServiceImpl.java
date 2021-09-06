@@ -46,7 +46,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public boolean generateNotificationToUser(UserNotificationDto dto) {
-        UserNotification userNotification = notificationMapper.dtoToEntity(dto);
+        UserNotification userNotification = (UserNotification) notificationMapper.dtoToEntity(dto);
 
         Administrator administrator = administratorService.findAdministratorByLogin(dto.getSender());
         userNotification.setSender(administrator);
