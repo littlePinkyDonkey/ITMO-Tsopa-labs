@@ -24,7 +24,7 @@ public class MailScheduler {
     }
 
     @Scheduled(cron = "*/60 * * * * *")
-    public void schedule() {
+    public void sendEmail() {
         List<MailDto> admins = mailMapper.toDto(cache);
         for(MailDto mailDto : admins) {
             try {

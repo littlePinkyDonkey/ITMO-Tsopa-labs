@@ -10,13 +10,11 @@ import java.util.List;
 public interface FeedbackService {
     boolean saveNewTemporaryFeedback(TemporaryFeedbackDto dto) throws Exception;
 
-    boolean savePublishedFeedback(TemporaryFeedback entity);
+    boolean acceptTemporaryFeedback(TemporaryFeedback entity);
 
     void updateTemporaryFeedbackStatus(TemporaryFeedback entity);
 
     TemporaryFeedback getTemporaryFeedbackById(Long id);
-
-    PublishedFeedback getPublishedFeedbackById(Long id);
 
     List<TemporaryFeedbackDto> getAllTemporaryFeedbacks(Long administratorId);
 

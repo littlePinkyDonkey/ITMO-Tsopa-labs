@@ -106,7 +106,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public boolean savePublishedFeedback(TemporaryFeedback entity) {
+    public boolean acceptTemporaryFeedback(TemporaryFeedback entity) {
         PublishedFeedback publishedFeedback = publishedFeedbackMapper.mapTemporaryFeedbackToPublishedFeedback(entity);
         publishedFeedback.setPublishedDate(new Timestamp(System.currentTimeMillis()));
 
@@ -153,11 +153,6 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public TemporaryFeedback getTemporaryFeedbackById(Long id) {
         return temporaryFeedbackRepository.findTemporaryFeedbackByReviewId(id);
-    }
-
-    @Override
-    public PublishedFeedback getPublishedFeedbackById(Long id) {
-        return publishedFeedbackRepository.findPublishedFeedbackByReviewId(id);
     }
 
     @Override
