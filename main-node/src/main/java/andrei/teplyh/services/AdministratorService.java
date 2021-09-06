@@ -5,7 +5,6 @@ import andrei.teplyh.entities.accounts.Administrator;
 import java.util.List;
 
 public interface AdministratorService {
-    List<Administrator> getAllAdmins();
 
     Administrator selectAdministratorWithMinimumWork();
 

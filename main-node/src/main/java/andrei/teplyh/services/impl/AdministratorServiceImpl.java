@@ -18,11 +18,6 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public List<Administrator> getAllAdmins() {
-        return administratorRepository.findAll();
-    }
-
-    @Override
     public Administrator selectAdministratorWithMinimumWork() {
         List<Administrator> administrators = administratorRepository.findAll();
         Administrator selectedAdministrator = null;

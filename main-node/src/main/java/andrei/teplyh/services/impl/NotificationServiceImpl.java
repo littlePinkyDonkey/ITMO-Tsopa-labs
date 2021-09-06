@@ -65,11 +65,6 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public UserNotificationDto getNotification() {
-        return null;
-    }
-
-    @Override
     public List<UserNotificationDto> getAllNotifications(Long userId) {
         List<UserNotification> notificationList = userService.findUserById(userId).getUserNotifications();
 
@@ -79,7 +74,7 @@ public class NotificationServiceImpl implements NotificationService {
     private void updateFeedbackInfo(TemporaryFeedback feedback, String revisionResult) {
         if (revisionResult.equals("accepted")) {
             feedback.setFeedbackStatus(FeedbackStatuses.ACCEPTED);
-            feedbackService.savePublishedFeedback(feedback);
+            feedbackService.acceptTemporaryFeedback(feedback);
         } else if (revisionResult.equals("rejected")) {
             feedback.setFeedbackStatus(FeedbackStatuses.REJECTED);
             feedbackService.updateTemporaryFeedbackStatus(feedback);

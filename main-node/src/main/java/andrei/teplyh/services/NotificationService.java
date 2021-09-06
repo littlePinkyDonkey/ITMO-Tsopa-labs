@@ -8,7 +8,5 @@ public interface NotificationService {
 
     boolean generateNotificationToUser(UserNotificationDto dto);
 
-    UserNotificationDto getNotification();
-
     List<UserNotificationDto> getAllNotifications(Long userId);
 }
