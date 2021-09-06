@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.common.TopicPartition;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,14 @@ import java.time.Duration;
 import java.util.Collections;
 
 @Service
-public class KafkaServiceImpl implements KafkaService{
+public class KafkaServiceImpl implements KafkaService {
+
+    @Value("${mail.subject}")
+    private String subject;
+
+    @Value("${mail.message}")
+    private String message;
+
     private final Consumer<String, String> consumer;
     private final ObjectMapper objectMapper;
     private final KafkaProperty kafkaProperty;
@@ -45,7 +54,7 @@ public class KafkaServiceImpl implements KafkaService{
                 MailDto mailDto;
                 try {
                     mailDto = objectMapper.readValue(record.value(), MailDto.class);
-                    mailService.send(mailDto.getEmail(), "Lab3", mailDto.getMessage());
+                    mailService.send(mailDto.getEmail(), subject, String.format(message, mailDto.getMessage()));
                     System.out.println(mailDto);
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
