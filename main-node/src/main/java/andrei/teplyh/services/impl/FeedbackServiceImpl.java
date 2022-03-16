@@ -69,7 +69,6 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    @Transactional
     public boolean saveNewTemporaryFeedback(TemporaryFeedbackDto dto) throws Exception {
         TemporaryFeedback entity = (TemporaryFeedback) temporaryFeedbackMapper.dtoToEntity(dto);
 
@@ -129,13 +128,11 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    @Transactional
     public void updateTemporaryFeedbackStatus(TemporaryFeedback entity) {
         temporaryFeedbackRepository.save(entity);
     }
 
     @Override
-    @Transactional
     public boolean updateTemporaryFeedback(TemporaryFeedbackDto dto) throws NullPointerException {
         TemporaryFeedback temporaryFeedback =
                 temporaryFeedbackRepository.findTemporaryFeedbackByReviewId(dto.getReviewId());
